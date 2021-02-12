@@ -7,15 +7,15 @@ services:
 
   dbt:
     build: .
-    working_dir: /dbt_unit_test/tests/test_project
+    working_dir: /dbt-unit-test/tests/test_project
     env_file: .env
     command: |
       /bin/bash -c "
-        pip install -e /dbt_unit_test
-        dbt_unit_test --log-level debug"
+        pip install -e /dbt-unit-test
+        dbt_unit_test --log-level warning"
     depends_on:
       - db
     volumes:
       - type: bind
-        source: ./dbt_unit_test
-        target: /dbt_unit_test
+        source: .
+        target: /dbt-unit-test
