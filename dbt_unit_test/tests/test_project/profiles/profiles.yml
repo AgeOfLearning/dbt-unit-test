@@ -1,0 +1,13 @@
+unit_test:
+  outputs:
+    test:
+      type: postgres
+      threads: 1
+      host: db
+      port: 5432
+      user: test
+      pass: test
+      dbname: test
+      schema: _unittest_
+
+  target: test

@@ -1,0 +1,21 @@
+version: "3"
+services:
+  db:
+    image: postgres
+    restart: always
+    env_file: .env
+
+  dbt:
+    build: .
+    working_dir: /dbt_unit_test/tests/test_project
+    env_file: .env
+    command: |
+      /bin/bash -c "
+        pip install -e /dbt_unit_test
+        dbt_unit_test --log-level debug"
+    depends_on:
+      - db
+    volumes:
+      - type: bind
+        source: ./dbt_unit_test
+        target: /dbt_unit_test
