@@ -1,3 +1,0 @@
-[console_scripts]
-dbt_unit_test = dbt_unit_test.app:run
-
