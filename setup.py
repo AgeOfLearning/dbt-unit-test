@@ -6,7 +6,7 @@ with open("README.md") as f:
     readme = f.read()
 
 # Runtime Requirements.
-inst_reqs = ["click"]
+inst_reqs = ["click", "jinja2"]
 
 # Dev Requirements
 extra_reqs = {
@@ -26,12 +26,10 @@ setup(
         "Intended Audience :: Information Technology",
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: BSD License",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
     ],
     keywords="Unit tests for DBT macros.",
-    author=u"Benjamin Ryon",
+    author="Benjamin Ryon",
     author_email="benjamin.ryon@aofl.com",
     url="",
     packages=find_packages(exclude=["ez_setup", "examples", "tests"]),
@@ -39,5 +37,5 @@ setup(
     zip_safe=False,
     install_requires=inst_reqs,
     extras_require=extra_reqs,
-    entry_points={"console_scripts": ["dbt_unit_test = dbt_unit_test.app:run"]},
+    entry_points={"console_scripts": ["dut = dbt_unit_test.app:dut"]},
 )

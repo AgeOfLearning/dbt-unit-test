@@ -5,14 +5,16 @@ services:
     restart: always
     env_file: .env
 
-  dbt:
-    build: .
+  dut-ci:
+    image: gitlab.aofl.com:5001/engineering-automation_tools/automation_images/dbt-unit-test-ci:latest
     working_dir: /dbt-unit-test/tests/test_project
     env_file: .env
     command: |
       /bin/bash -c "
         pip install -e /dbt-unit-test
-        dbt_unit_test --log-level warning"
+        tox
+        dut run --log-level debug
+        "
     depends_on:
       - db
     volumes:

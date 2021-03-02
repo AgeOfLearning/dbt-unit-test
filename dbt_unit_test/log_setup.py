@@ -1,4 +1,4 @@
-import logging
+import logging, os
 
 LOG_LEVELS = {
     'critical': logging.CRITICAL,
@@ -9,19 +9,20 @@ LOG_LEVELS = {
     'debug': logging.DEBUG
 }
 
-logging.basicConfig(level=logging.WARNING,
-                    format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
-                    datefmt='%m-%d %H:%M',
+os.makedirs('logs', exist_ok=True)
+
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(name)-3s %(levelname)-8s %(message)s',
                     filename='logs/dut.log', 
                     filemode='w')
 
 console = logging.StreamHandler()
 console.setLevel(logging.INFO)
 
-formatter = logging.Formatter('%(name)s: %(message)s')
+formatter = logging.Formatter('%(message)s')
 
 console.setFormatter(formatter)
 
-logging.getLogger('').addHandler(console)
-
 logger = logging.getLogger('dut')
+
+logger.addHandler(console)

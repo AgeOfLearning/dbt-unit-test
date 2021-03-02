@@ -1,0 +1,6 @@
+version: 2
+models:
+  - name: test2_model
+    tests:
+      - diff:
+          test: ref('test2_expect')

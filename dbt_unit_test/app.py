@@ -2,46 +2,61 @@
 
 import os, sys
 import click
-
-
-from .log_setup import logger, LOG_LEVELS
-from . import operations as ops
 import yaml
 
-with open('dbt_unit_test.yml', 'r') as conf_file:
-    config = yaml.safe_load(conf_file.read())
 
+from .log_setup import console, LOG_LEVELS
+from . import operations as ops
+
+@click.group()
+def dut():
+    pass
+
+@click.command()
+def init():
+    if not os.path.exists('dbt_unit_test.yml'):
+        with open('dbt_unit_test.yml', 'w') as conf_file:
+            conf_file.write(ops.render_template('default_config.yml'))
+    click.secho('Please set up a dbt profile called "unit_test".', fg='blue')
+    
 
 @click.command()
 @click.option('--tests', help='tests to run.')
 @click.option('--batches', default=2, help='batches to run.')
-@click.option('--log-level', default='warning', help='Set log level.')
+@click.option('--log-level', default='info', help='Set log level.')
 def run(tests, batches, log_level):
     """Run unit tests on a dbt models."""
-    logger.setLevel(LOG_LEVELS.get(log_level, 'warning'))
+    # use defaults if there is no config file.
+
+    with open('dbt_unit_test.yml', 'r') as conf_file:
+        config = yaml.safe_load(conf_file.read())
+
+    console.setLevel(LOG_LEVELS.get(log_level, 'info'))
 
     profile = ['--profile', config['unit_test_profile']]
 
-    model = ['+tag:unit_test+']
-    if tests:
-        model = [f'+tag:{test}+' for test in tests.split(',')]
+    model = ['--model']
+    model += [f'+tag:{test}+' for test in tests.split(',')] if tests else ['+tag:unit_test+']
+    select = ['--select'] + model[1:]
 
     ops.remove_files(**config)
     ops.copy_files(**config)
 
     errors = 0
 
-    errors += ops.dbt_sp(['dbt', 'seed', '--full-refresh', '--select'] + model + profile)
+    errors += ops.dbt_sp(['dbt', 'seed', '--full-refresh'] + select + profile)
 
-    for batch in range(1, batches):
-        cmd = ['dbt', 'run', '--vars', f"batch: {batch}", '--model'] + model + profile
-        errors += ops.dbt_sp(cmd + ['--full-refresh'] if batch == 1 else cmd)
-        errors += ops.dbt_sp(['dbt', 'run', '--model']  + model + profile)
+    for batch in range(1, batches+1):
+        vars_ = []
+        if batch < batches:
+            vars_ += ['--vars', f"batch: {batch}"]
 
-    errors += ops.dbt_sp(['dbt', 'test', '--model'] + model + profile)
+        if batch == batches:
+            vars_ += ['--full-refresh']
 
-    # TODO: Decide whether we want to keep the schema around.
-    # errors += ops.dbt_sp(['dbt', 'run-operation', 'drop_schema', '--args', 'name: _unittests_'])
+        errors += ops.dbt_sp(['dbt', 'run'] + model + profile + vars_)
+
+    errors += ops.dbt_sp(['dbt', 'test'] + model + profile)
 
     if log_level != 'debug':
         ops.remove_files(**config)
@@ -49,7 +64,8 @@ def run(tests, batches, log_level):
     if errors != 0:
         sys.exit(os.EX_SOFTWARE)
         
-    
+dut.add_command(run)
+dut.add_command(init)
 
 if __name__ == '__main__':
-    run()
+    dut()
