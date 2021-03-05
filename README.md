@@ -29,7 +29,7 @@ Now, you will need to create a dbt profile called `unit_test`. This profile shou
 
 ## Quick Start
 ```
-dut run
+$ dut run
 ```
 This runs all the tests. You can select which tests to run with `--tests`.
 

@@ -1,4 +1,4 @@
-"""dbt_unit_test module."""
+"""dbt-unit-test module."""
 
 from setuptools import find_packages, setup
 
@@ -30,7 +30,7 @@ setup(
     keywords="sql dbt test unittest",
     author="Benjamin Ryon",
     author_email="benjamin.ryon@aofl.com",
-    url="",
+    url="https://github.com/AgeOfLearning/dbt-unit-test",
     packages=find_packages(exclude=["ez_setup", "examples", "tests"]),
     include_package_data=True,
     zip_safe=False,
