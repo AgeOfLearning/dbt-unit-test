@@ -17,7 +17,7 @@ extra_reqs = {
 
 setup(
     name="dbt-unit-test",
-    version="0.0.3",
+    version="0.0.4",
     description=u"A tiny framework for testing reusable code inside of dbt models",
     long_description=readme,
     long_description_content_type="text/markdown",
@@ -32,9 +32,6 @@ setup(
     author_email="benjamin.ryon@aofl.com",
     url="https://github.com/AgeOfLearning/dbt-unit-test",
     packages=find_packages(exclude=["ez_setup", "examples", "tests"]),
-    package_data={
-        "": ["*.yml", "*.sql"]
-    },
     include_package_data=True,
     zip_safe=False,
     install_requires=inst_reqs,
