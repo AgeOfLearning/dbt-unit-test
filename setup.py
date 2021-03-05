@@ -16,19 +16,18 @@ extra_reqs = {
 
 
 setup(
-    name="dbt_unit_test",
+    name="dbt-unit-test",
     version="0.0.1",
-    description=u"Unit tests for DBT macros.",
+    description=u"A tiny framework for testing reusable code inside of dbt models",
     long_description=readme,
     long_description_content_type="text/markdown",
-    python_requires=">=3",
+    python_requires=">=3.6",
     classifiers=[
         "Intended Audience :: Information Technology",
-        "Intended Audience :: Science/Research",
-        "License :: OSI Approved :: BSD License",
+        "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3.8",
     ],
-    keywords="Unit tests for DBT macros.",
+    keywords="sql dbt test unittest",
     author="Benjamin Ryon",
     author_email="benjamin.ryon@aofl.com",
     url="",
