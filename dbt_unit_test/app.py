@@ -3,9 +3,10 @@
 import os, sys
 import click
 import yaml
+import shutil
 
 
-from .log_setup import console, LOG_LEVELS
+from .log_setup import logger, console, LOG_LEVELS
 from . import operations as ops
 
 @click.group()
@@ -17,6 +18,11 @@ def init():
     if not os.path.exists('dbt_unit_test.yml'):
         with open('dbt_unit_test.yml', 'w') as conf_file:
             conf_file.write(ops.render_template('default_config.yml'))
+    example_test_path = os.path.join(os.path.dirname(__file__), 'templates/example_test')
+    if os.path.exists('unit_tests/example_test'):
+        shutil.rmtree('unit_tests/example_test')
+    shutil.copytree(example_test_path, 'unit_tests/example_test')
+    click.secho('DUT setup complete.')
     click.secho('Please set up a dbt profile called "unit_test".', fg='blue')
     
 
@@ -51,7 +57,7 @@ def run(tests, batches, log_level):
         if batch < batches:
             vars_ += ['--vars', f"batch: {batch}"]
 
-        if batch == batches:
+        if batch == 1:
             vars_ += ['--full-refresh']
 
         errors += ops.dbt_sp(['dbt', 'run'] + model + profile + vars_)
@@ -63,6 +69,8 @@ def run(tests, batches, log_level):
 
     if errors != 0:
         sys.exit(os.EX_SOFTWARE)
+    else:
+        logger.info('All tests passed!')
         
 dut.add_command(run)
 dut.add_command(init)

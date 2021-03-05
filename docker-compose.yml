@@ -13,7 +13,7 @@ services:
       /bin/bash -c "
         pip install -e /dbt-unit-test
         tox
-        dut run --log-level debug
+        dut run --log-level debug --tests test_incremental_sum
         "
     depends_on:
       - db
