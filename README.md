@@ -58,7 +58,7 @@ After the unit test models are run, `dut` will validate that the DBT model produ
 
 ## Inside `model.sql`
 The `example_test/model.sql` looks like this:
-```
+```sql
 {{
     config(
         materialized='view'
@@ -80,7 +80,7 @@ Any model/seed in the test can be referenced with `{{ ref('<test_name>_<file_nam
 Incremental models are often some of the trickiest to get right. This is because they rely on the state created by the previous runs to form their current run output. `dut` has a test pattern for this important use-case.
 
 The `input.csv` file can have a column called `batch`, like this:
-```
+```sql
 batch,  grp,    metric
 1,      0,      10
 1,      0,      10
@@ -95,7 +95,7 @@ batch,  grp,    metric
 `dut run` will automatically create and additional model called `<test_name>_batch` that will be available within `model.sql`. `dut run` runs the test models N (default 2) times configurable with `--batches`.
 
 On the first dbt run in our `example_test`, the model referenced by `{{ ref('example_test_batch') }}` will only have this data:
-```
+```sql
 batch,  grp,    metric
 1,      0,      10
 1,      0,      10
@@ -107,11 +107,11 @@ It only contains rows where `batch <= 1`. Subsequent dbt runs will filter less o
 ## Tutorial: Convert `example_test` into an incremental model.
 
 If we change the model configuration to:
-```
+```sql
 {{
     config(
         materialized='incremental',
-        unique_key='grp
+        unique_key='grp'
     )
 }}
 with base as (
@@ -127,7 +127,7 @@ select * from base
 Our test passes, but the model is not really incremental because the entire table is replaced on the last dbt run of the `dut run`. We want our model to consume only the new data on each run, as well as the previous state of the model.
 
 Let's change our model to this:
-```
+```sql
 {{
     config(
         materialized='incremental',
@@ -184,7 +184,7 @@ Great! Now we have an incremental model that only requires the newest raw data, 
 We have just proven that this incremental model operates the way we expect, but we need to be able to reuse this code. Let's package this as a macro:
 
 `macros/incremental_sum.sql`
-```
+```sql
 {% macro incremental_sum(
     reference,
     metric_field,
@@ -244,7 +244,7 @@ select * from base
 The generic version of this code is not so easy on the eyes, but what is important is that the interface is nice and clean:
 
 `example_test/model.sql`
-```
+```sql
 {{
     config(
         materialized='incremental',
