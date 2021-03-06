@@ -1,0 +1,6 @@
+version: 2
+models:
+  - name: test_incremental_sum_model
+    tests:
+      - diff:
+          test: ref('test_incremental_sum_expect')

@@ -41,8 +41,10 @@ def run(tests, batches, log_level):
 
     profile = ['--profile', config['unit_test_profile']]
 
+    unit_test_dir = config['unit_test_dir']
+
     model = ['--model']
-    model += [f'+tag:{test}+' for test in tests.split(',')] if tests else ['+tag:unit_test+']
+    model += [f'+{test}_model+' for test in tests.split(',')] if tests else [f'+path:models/{unit_test_dir}+']
     select = ['--select'] + model[1:]
 
     ops.remove_files(**config)
