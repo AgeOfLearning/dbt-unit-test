@@ -5,6 +5,5 @@ with extra_rows as (
 missing_rows as (
     SELECT * FROM {{ test }} EXCEPT SELECT * FROM {{ model }}
 )
-SELECT count(*)
-FROM (SELECT * FROM extra_rows UNION ALL SELECT * FROM missing_rows) a
+SELECT * FROM extra_rows UNION ALL SELECT * FROM missing_rows
 {% endmacro %}
