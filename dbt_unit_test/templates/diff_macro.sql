@@ -23,17 +23,17 @@
 {% endfor %}
 
 with extra_rows as (
-    SELECT print_list(model_columns_to_select) 
+    SELECT {{ print_list(model_columns_to_select) }}
     FROM {{ model }} 
     EXCEPT 
-    SELECT print_list(test_columns_to_select) 
+    SELECT {{ print_list(test_columns_to_select) }}
     FROM {{ test }}
 ), 
 missing_rows as (
-    SELECT print_list(test_columns_to_select) 
+    SELECT {{ print_list(test_columns_to_select) }}
     FROM {{ test }} 
     EXCEPT 
-    SELECT print_list(model_columns_to_select) 
+    SELECT {{ print_list(model_columns_to_select) }}
     FROM {{ model }}
 )
 SELECT * FROM extra_rows 
