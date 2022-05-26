@@ -17,7 +17,7 @@ extra_reqs = {
 
 setup(
     name="dbt-unit-test",
-    version="0.0.5",
+    version="0.1.0",
     description=u"A tiny framework for testing reusable code inside of dbt models",
     long_description=readme,
     long_description_content_type="text/markdown",
