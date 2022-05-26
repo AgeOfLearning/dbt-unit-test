@@ -64,8 +64,8 @@ def run(tests, batches, log_level):
 
     for batch in range(1, batches+1):
         vars_ = []
-        if batch < batches:
-            vars_ += ['--vars', f"batch: {batch}"]
+        if batch <= batches:
+            vars_ += ['--vars', f"{{batch: {batch}}}"]
 
         if batch == 1:
             vars_ += ['--full-refresh']

@@ -5,5 +5,5 @@
     )
 }}
 SELECT * FROM {{ ref('{% endraw %}{{ test_name }}{% raw %}_input') }}
-WHERE batch <= {{ var('batch', 100) }}{% endraw %}
+WHERE batch = {{ var('batch') }}{% endraw %}
 -- {% raw %}{{ ref('{% endraw %}{{ test_name }}{% raw %}_expect') }}{% endraw %}
