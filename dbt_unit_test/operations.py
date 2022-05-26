@@ -53,7 +53,7 @@ def write_derived_file(original_file_name, derived_file_type):
 def copy_files(
     unit_test_dir='unit_tests',
     models_dir='models',
-    data_dir='data',
+    seed_dir='seeds',
     macros_dir='macros',
     **kw
 ):
@@ -65,7 +65,7 @@ def copy_files(
         write_derived_file(dbt_file, 'batch.sql')
 
     for f in glob.glob(unit_test_dir + '/**/*.csv', recursive=True):
-        dbt_file = map_dbt_file_to_dut_file(data_dir, f)
+        dbt_file = map_dbt_file_to_dut_file(seed_dir, f)
         os.makedirs(os.path.dirname(dbt_file), exist_ok=True)
         shutil.copy(f, dbt_file)
 
@@ -85,12 +85,12 @@ def copy_files(
 def remove_files(
     unit_test_dir='unit_tests',
     models_dir='models',
-    data_dir='data',
+    seed_dir='seeds',
     macros_dir='macros',
     **kw
 ):
     shutil.rmtree(os.path.join(models_dir, unit_test_dir), ignore_errors=True)
-    shutil.rmtree(os.path.join(data_dir, unit_test_dir), ignore_errors=True)
+    shutil.rmtree(os.path.join(seed_dir, unit_test_dir), ignore_errors=True)
     shutil.rmtree(os.path.join(macros_dir, unit_test_dir), ignore_errors=True)
 
 
