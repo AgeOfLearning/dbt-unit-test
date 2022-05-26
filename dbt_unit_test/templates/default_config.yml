@@ -6,7 +6,7 @@ unit_test_dir: unit_tests
 # these must match (or at least be includied in) the settings of your dbt_project.yml
 models_dir: models
 macros_dir: macros
-data_dir: data
+seed_dir: seeds
 
 # this is the profile that will run your tests
 unit_test_profile: unit_test

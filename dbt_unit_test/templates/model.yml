@@ -2,5 +2,5 @@ version: 2
 models:
   - name: {{ test_name }}_model
     tests:
-      - diff:
-          test: ref('{{ test_name }}_expect')
+      - dbt_utils.equality:
+          compare_model: ref('{{ test_name }}_expect')
