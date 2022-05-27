@@ -1,2 +1,0 @@
-include dbt_unit_test/templates/**/*
-include dbt_unit_test/templates/*
