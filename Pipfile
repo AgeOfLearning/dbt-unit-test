@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+click = "*"
+dbt-core = "*"
+
+[dev-packages]
+black = "*"
+flake8 = "*"
+isort = "*"
+mypy = "*"
+pytest = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+dbt-unit-test = { path = ".", editable = true }
+
+[requires]
+python_version = "3.8"
