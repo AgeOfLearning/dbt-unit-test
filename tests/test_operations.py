@@ -14,7 +14,7 @@ def dirs():
     return dict(
         unit_test_dir="unit_tests",
         models_dir="_models",
-        data_dir="_data",
+        seed_dir="_seeds",
         macros_dir="_macros",
     )
 
@@ -22,11 +22,11 @@ def dirs():
 @pytest.fixture(autouse=True)
 def clean_up():
     shutil.rmtree("_models", ignore_errors=True)
-    shutil.rmtree("_data", ignore_errors=True)
+    shutil.rmtree("_seeds", ignore_errors=True)
     shutil.rmtree("_macros", ignore_errors=True)
     yield
     shutil.rmtree("_models", ignore_errors=True)
-    shutil.rmtree("_data", ignore_errors=True)
+    shutil.rmtree("_seeds", ignore_errors=True)
     shutil.rmtree("_macros", ignore_errors=True)
 
 
@@ -43,13 +43,13 @@ def test__copy_files(dirs):
         "_models/unit_tests/test1_model.sql",
         "_models/unit_tests/test1_batch.sql",
     }
-    assert set(glob.glob("_data/unit_tests/test1*", recursive=True)) == {
-        "_data/unit_tests/test1_input.csv",
-        "_data/unit_tests/test1_expect.csv",
+    assert set(glob.glob("_seeds/unit_tests/test1*", recursive=True)) == {
+        "_seeds/unit_tests/test1_input.csv",
+        "_seeds/unit_tests/test1_expect.csv",
     }
-    assert set(glob.glob("_data/unit_tests/test2*", recursive=True)) == {
-        "_data/unit_tests/test2_input.csv",
-        "_data/unit_tests/test2_expect.csv",
+    assert set(glob.glob("_seeds/unit_tests/test2*", recursive=True)) == {
+        "_seeds/unit_tests/test2_input.csv",
+        "_seeds/unit_tests/test2_expect.csv",
     }
     assert os.path.exists("_macros/unit_tests/test_macros.sql")
 
@@ -83,7 +83,7 @@ def test__map_dbt_file_to_dut_file():
 
 def test__render_template():
     rendered = operations.render_template("model.yml", test_name="my_model")
-    assert "test: ref('my_model_expect')" in rendered
+    assert "compare_model: ref('my_model_expect')" in rendered
 
 
 def test__dbt_sp():
