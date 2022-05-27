@@ -1,0 +1,2 @@
+include src/dbt_unit_test/assets/**/*
+include src/dbt_unit_test/assets/*
