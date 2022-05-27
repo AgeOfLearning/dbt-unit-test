@@ -21,9 +21,7 @@ def init():
     if not os.path.exists("dbt_unit_test.yml"):
         with open("dbt_unit_test.yml", "w") as conf_file:
             conf_file.write(ops.render_template("default_config.yml"))
-    example_test_path = os.path.join(
-        os.path.dirname(__file__), "assets/example_test"
-    )
+    example_test_path = os.path.join(os.path.dirname(__file__), "assets/example_test")
     if os.path.exists("unit_tests/example_test"):
         shutil.rmtree("unit_tests/example_test")
     shutil.copytree(example_test_path, "unit_tests/example_test")
@@ -36,7 +34,10 @@ def init():
 @click.option("--tests", help="tests to run.")
 @click.option("--batches", default=2, help="batches to run.")
 @click.option("--log-level", default="info", help="Set log level.")
-def run(tests, batches, log_level):
+@click.option(
+    "--cleanup/--no-cleanup", is_flag=True, default=True, help="Set log level."
+)
+def run(tests, batches, log_level, cleanup):
     """Run unit tests on a dbt models."""
 
     # use defaults if there is no config file.
@@ -48,22 +49,19 @@ def run(tests, batches, log_level):
 
     profile = ["--profile", config["unit_test_profile"]]
 
-    seed_dir = config["seed_dir"]
-    models_dir = config["models_dir"]
-    unit_test_dir = config["unit_test_dir"]
+    seed_dir = os.path.join(config["seed_dir"], config["unit_test_dir"])
+    models_dir = os.path.join(config["models_dir"], config["unit_test_dir"])
 
-    # TODO: tests.split(" ") to match dbt style
-    # TODO: os.path.join those directories
     # TODO: do we need the +model+? There shouldn't be dependencies for unit tests
-    model = (
-        [f"+{test}_model+" for test in tests.split(",")]
-        if tests
-        else [f"+path:{models_dir}/{unit_test_dir}+"]
-    )
     seed = (
-        [f"+{test}_model+" for test in tests.split(",")]
+        [f"+{test}_model+" for test in tests.split(" ")]
         if tests
-        else [f"+path:{seed_dir}/{unit_test_dir}+"]
+        else [f"+path:{seed_dir}+"]
+    )
+    model = (
+        [f"+{test}_model+" for test in tests.split(" ")]
+        if tests
+        else [f"+path:{models_dir}+"]
     )
     select_seed = ["--select"] + seed
     select_model = ["--select"] + model
@@ -88,7 +86,7 @@ def run(tests, batches, log_level):
     errors += ops.dbt_sp(["dbt", "test"] + select_model + profile)
 
     # TODO make this a cleanup flag (default: True)
-    if log_level != "debug":
+    if cleanup:
         ops.remove_files(**config)
 
     if errors != 0:
