@@ -72,13 +72,6 @@ def copy_files(
             with open(input_file_name, "w") as dummy_input_file:
                 dummy_input_file.write("batch")
 
-    macro_filepath = os.path.join(macros_dir, unit_test_dir, "test_macros.sql")
-    os.makedirs(os.path.dirname(macro_filepath), exist_ok=True)
-    with open(macro_filepath, "w") as macro_file:
-        macro_file.write(
-            render_template("diff_macro.sql") + render_template("drop_schema_macro.sql")
-        )
-
 
 def remove_files(
     unit_test_dir="unit_tests",
@@ -93,8 +86,8 @@ def remove_files(
 
 
 def render_template(template, **kw):
-    templates_dir = os.path.join(os.path.dirname(__file__), "templates")
-    with open(os.path.join(templates_dir, template)) as t:
+    assets_dir = os.path.join(os.path.dirname(__file__), "assets")
+    with open(os.path.join(assets_dir, template)) as t:
         out = t.read()
         if kw:
             return jinja2.Template(out).render(**kw)

@@ -22,7 +22,7 @@ def init():
         with open("dbt_unit_test.yml", "w") as conf_file:
             conf_file.write(ops.render_template("default_config.yml"))
     example_test_path = os.path.join(
-        os.path.dirname(__file__), "templates/example_test"
+        os.path.dirname(__file__), "assets/example_test"
     )
     if os.path.exists("unit_tests/example_test"):
         shutil.rmtree("unit_tests/example_test")

@@ -1,4 +1,6 @@
+---
 version: 2
+
 models:
   - name: {{ test_name }}_model
     tests:

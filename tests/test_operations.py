@@ -51,7 +51,6 @@ def test__copy_files(dirs):
         "_seeds/unit_tests/test2_input.csv",
         "_seeds/unit_tests/test2_expect.csv",
     }
-    assert os.path.exists("_macros/unit_tests/test_macros.sql")
 
 
 def test__write_derived_file(dirs):
