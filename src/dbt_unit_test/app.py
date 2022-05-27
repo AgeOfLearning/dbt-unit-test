@@ -35,7 +35,7 @@ def init():
 @click.option("--batches", default=2, help="batches to run.")
 @click.option("--log-level", default="info", help="Set log level.")
 @click.option(
-    "--cleanup/--no-cleanup", is_flag=True, default=True, help="Set log level."
+    "--cleanup/--no-cleanup", is_flag=True, default=True, help="Cleanup generated test files."
 )
 def run(tests, batches, log_level, cleanup):
     """Run unit tests on a dbt models."""
