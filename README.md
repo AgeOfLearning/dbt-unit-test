@@ -11,6 +11,7 @@ While reusable code has big advantages, it introduces a single point of failure,
 
 ## To do
  - [ ] `dut run --test <test name>` does not copy the `expect.csv` file
+ - [ ] Build end-to-end functional tests
 
 ## Dependencies
 This project assumes you have the [dbt-utils][dbt_utils] package installed in your project. It uses a `dbt-utils` test to validate that your model matches the expected output.
