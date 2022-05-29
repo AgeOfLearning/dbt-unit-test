@@ -1,21 +1,23 @@
-dbt-unit-test (dut)
-===
+# dbt-unit-test
 
 _A tiny framework for testing reusable code inside of dbt models_
+> Forked from [AgeOfLearning][source_repo]
 
-[DBT](www.getdbt.com) (Data Buld Tool) is a great way to maintain reusable sql code. With [macros](https://docs.getdbt.com/docs/building-a-dbt-project/jinja-macros#macros), we can build parametrizable code blocks which can be used in many places while maintaining DRYness. DBT even allows us to package macros as [modules](https://docs.getdbt.com/docs/building-a-dbt-project/package-management) to be maintained independently and even shared with the world as open-source code like the [dbt-utils](https://github.com/fishtown-analytics/dbt-utils) project.
+[DBT][dbt] (Data Buld Tool) is a great way to maintain reusable sql code. With [macros][dbt_macros], we can build parametrizable code blocks which can be used in many places while maintaining DRYness. DBT even allows us to package macros as [modules][dbt_modules] to be maintained independently and even shared with the world as open-source code like the [dbt-utils][dbt_utils]
 
 While reusable code has big advantages, it introduces a single point of failure, which requires careful testing.
 
 `dbt-unit-test` makes it easy to write test cases for any code that might be reused in DBT models.
 
+## To do
+ - [ ] `dut run --test <test name>` does not copy the `expect.csv` file
+
+## Dependencies
+This project assumes you have the [dbt-utils][dbt_utils] package installed in your project. It uses a `dbt-utils` test to validate that your model matches the expected output.
+
 ## Installation
 ```
-$ pip install dbt-unit-test
-```
-or for the very latest version:
-```
-$ pip install git+https://github.com/AgeOfLearning/dbt-unit-test.git
+pip install git+https://github.com/octo-youcef/dbt-unit-test.git
 ```
 
 ## Setup
@@ -25,7 +27,7 @@ $ dut init
 ```
 This will set up a `dbt_unit_test.yml` file right next to your `dbt_project.yml`.
 
-Now, you will need to create a dbt profile called `unit_test`. This profile should use a database/schema on the system where the code to be tested is run. Ideally, at least the schema should be different than any schema that contains "real" DBT models.
+Now, you will need to create a dbt profile for unit testing, and configure your `dbt_unit_test.yml` with directories and this unit testing profile. This profile should use a database/schema on the system where the code to be tested is run. Ideally, at least the schema should be different than any schema that contains "real" DBT models.
 
 ## Quick Start
 ```
@@ -48,9 +50,9 @@ your_dbt_project_root/
 ```
 This `example_test` is the basic setup of a unit test: A directory with 3 files: `input.csv`,  `model.sql` and `expect.csv`. The files are always named like this. The directory distinguishes one test from another. Test directories can be organized within other directories, but must have unique names.
 
-The `input.csv` and `expect.csv` files are both DBT [seeds](https://docs.getdbt.com/docs/building-a-dbt-project/seeds). They represent data referenced by the dbt model in `model.sql` and the data that this model is expected to produce.
+The `input.csv` and `expect.csv` files are both DBT [seeds][dbt_seeds]. They represent data referenced by the dbt model in `model.sql` and the data that this model is expected to produce. `dut` will create these seeds (and any other `.csv` files you place in this directory) and they can be referenced normally with `{{ ref('<test name>_<file name>') }}`.
 
-The `model.sql` file is just a dbt model. It should contain code that is used elsewhere like a DBT macro or a UDF.
+The `model.sql` file is just a dbt model. It should contain code that is used elsewhere like a dbt macro or a UDF.
 
 These files are co-located in a single directory so that each test represents a discret unit of code an all of its components are easy to find. The `dut run` command will place these files in the appropriate locations (`models/`, `data/`) so that the they can be run by DBT.
 
@@ -261,3 +263,11 @@ The generic version of this code is not so easy on the eyes, but what is importa
 }}
 ```
 Now we can write many tests for this reusable code, and use it with confidence because we have tested it thoroughly!
+
+
+[dbt]: www.getdbt.com
+[dbt_macros]: https://docs.getdbt.com/docs/building-a-dbt-project/jinja-macros#macros
+[dbt_modules]: https://docs.getdbt.com/docs/building-a-dbt-project/package-management
+[dbt_seeds]: https://docs.getdbt.com/docs/building-a-dbt-project/seeds
+[dbt_utils]: https://github.com/dbt-labs/dbt-utils
+[source_repo]: https://github.com/AgeOfLearning/dbt-unit-test.git
