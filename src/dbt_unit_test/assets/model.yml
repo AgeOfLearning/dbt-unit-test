@@ -1,0 +1,8 @@
+---
+version: 2
+
+models:
+  - name: {{ test_name }}_model
+    tests:
+      - dbt_utils.equality:
+          compare_model: ref('{{ test_name }}_expect')

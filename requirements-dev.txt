@@ -1,5 +1,0 @@
-pytest
-pytest-cov
-pre-commit
-dbt
-tox

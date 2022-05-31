@@ -1,2 +1,2 @@
-include dbt_unit_test/templates/**/*
-include dbt_unit_test/templates/*
+include src/dbt_unit_test/assets/**/*
+include src/dbt_unit_test/assets/*
