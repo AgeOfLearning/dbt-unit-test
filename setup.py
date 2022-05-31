@@ -13,9 +13,9 @@ setup_args = dict(
     description="A framework for dbt macro testing",
     python_requires=">=3.6",
     # Credentials
-    author="Youcef Kadri",
-    author_email="youcef.kadri@octoenergy.com",
-    url="https://github.com/octo-youcef/dbt-unit-test",
+    author="Benjamin Ryon",
+    author_email="benjamin.ryon@aofl.com",
+    url="https://github.com/AgeOfLearning/dbt-unit-test",
     classifiers=[
         "Intended Audience :: Information Technology",
         "License :: OSI Approved :: MIT License",
